@@ -35,10 +35,7 @@ public class Player implements Renderable, Event {
 		if(anim != null) {
 			if(!anim.tick()) {
 				if(level.at(x,y) != Tile.SOLID) {
-					Direction dir = anim.direction;
-					anim = null;
-					if(!move(dir))
-						level.fill();
+					anim.anim = 0;
 				}
 				else {
 					anim = null;
@@ -53,10 +50,30 @@ public class Player implements Renderable, Event {
 				update_fill = true;
 			}
 		} else if(level.at(x,y) != Tile.SOLID) {
-			if(!move(Direction.UP))
-				level.fill();
+			anim = new MovementAnimation(Direction.UP);
 		}
-		
+		x = Math.round(x*100) / 100.0;
+		y = Math.round(y*100) / 100.0;
+		if(x < 0.5) {
+			anim = null;
+			level.fill();
+			x = 0.5;
+		}
+		if(x > level.width - 0.5) {
+			anim = null;
+			level.fill();
+			x = level.width - 0.5;
+		}
+		if(y < 0.5) {
+			anim = null;
+			level.fill();
+			y = 0.5;
+		}
+		if(y > level.height - 0.5) {
+			anim = null;
+			level.fill();
+			y = level.height - 0.5;
+		}
 		return true;
 	}
 
@@ -76,24 +93,9 @@ public class Player implements Renderable, Event {
 		return lives;
 	}
 
-	public boolean move(Direction dir) {
-		if(anim == null) {
-			if(x <= 0.5 && dir == Direction.LEFT) {
-				return false;
-			}
-			if(x >= level.width - 0.5 && dir == Direction.RIGHT) {
-				return false;
-			}
-			if(y <= 0.5 && dir == Direction.UP) {
-				return false;
-			}
-			if(y >= level.height - 0.5 && dir == Direction.DOWN) {
-				return false;
-			}
+	public void move(Direction dir) {
+		if(anim == null) 
 			anim = new MovementAnimation(dir);
-			return true;
-		}
-		return false;
 	}
 
 	static {
@@ -112,13 +114,13 @@ public class Player implements Renderable, Event {
 	}
 	
 	private class MovementAnimation implements Event {
-		private static final double speed = 0.5;
+		private static final double speed = 0.25;
 		private final Direction direction;
-		private double time;
+		private double anim;
 		
 		public MovementAnimation(Direction direction) {
 			this.direction = direction;
-			time = 0;
+			anim = 0;
 		}
 		
 		@Override
@@ -140,8 +142,8 @@ public class Player implements Renderable, Event {
 				break;
 			}
 			
-			time++;
-			return time < (1/speed);
+			anim++;
+			return anim < (1/speed);
 		}
 	}
 

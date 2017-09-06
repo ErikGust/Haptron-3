@@ -61,7 +61,7 @@ public class Level implements Screen, KeyListener {
 	private LevelBuilder fallback;
 	
 	public Level(LevelData level_data, LevelBuilder fallback) {
-		this(level_data, 5, fallback.haptron);
+		this(level_data, 3, fallback.haptron);
 		this.fallback = fallback;
 		this.mainMenu.setText("Stop");
 	}
@@ -84,8 +84,8 @@ public class Level implements Screen, KeyListener {
 		this.monsters = new Monster [level_data.getMonsterCount()];
 		
 		for(int i = 0; i < this.monsters.length; i++) {
-			monsters[i] = new Monster(MonsterData.values.get(
-					(int)level_data.getMonster(i)), this);
+			monsters[i] = new Monster(MonsterData.values()
+					[(int)level_data.getMonster(i)], this);
 			monsters[i].x = level_data.getMonsterX(i);
 			monsters[i].y = level_data.getMonsterY(i);
 			monsters[i].dirX = level_data.getMonsterDirX(i);

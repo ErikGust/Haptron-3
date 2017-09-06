@@ -98,7 +98,7 @@ public class LevelArt {
 			checked[cur] = true;
 			if(cur < 0 || cur >= cap);
 			else if(tiles[cur] != Tile.AIR);
-			else { // current tile empty
+			else {
 				clear[cur] = true;
 				n = cur - width;
 				if(n >= 0 && n < cap && !checked[n]) {

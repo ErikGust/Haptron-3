@@ -28,7 +28,6 @@ public class Entry {
 			case "-levelbuilder":
 				LevelBuilder.entry(_args);
 				break;
-				
 			default:
 				entry(_args);
 			}

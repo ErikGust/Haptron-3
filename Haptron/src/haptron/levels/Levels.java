@@ -27,7 +27,7 @@ public class Levels {
 	}
 	
 	public static Level newGame(Haptron haptron) {
-		return new Level(getLevel(0), 3, haptron);
+		return new Level(getLevel(3), 3, haptron);
 	}
 	
 	public static LevelData getLevel(int level) {

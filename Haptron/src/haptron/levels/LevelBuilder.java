@@ -130,9 +130,9 @@ public class LevelBuilder implements Screen  {
 		test.setBackground(color);
 		test.setFont(font);
 		
-		monsters_options = new ImageRectangle[MonsterData.values.size()];
+		monsters_options = new ImageRectangle[MonsterData.values().length];
 		for(int i = 0; i < monsters_options.length; i++) {
-			MonsterData m = MonsterData.values.get(i);
+			MonsterData m = MonsterData.values()[i];
 			monsters_options[i] = new ImageRectangle(m.image);
 			monsters_options[i].setSize((int)(m.size*Tile.SIZE), (int)(m.size*Tile.SIZE));
 			monsters_options[i].extra = (Object) m;
@@ -239,7 +239,7 @@ public class LevelBuilder implements Screen  {
 		
 		for(int i = 0; i < data.getMonsterCount(); i++) {
 			Monster monster = new Monster(
-					MonsterData.values.get((int)data.getMonster(i)), null);
+					MonsterData.values()[(int)data.getMonster(i)], null);
 			monster.x = data.getMonsterX(i);
 			monster.y = data.getMonsterY(i);
 			monster.dirX = data.getMonsterDirX(i);
