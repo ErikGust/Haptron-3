@@ -7,7 +7,7 @@ import haptron.utils.Resources;
 public class Levels {
 	private static final LevelData[] levels;
 	static {
-		levels = new LevelData[5];
+		levels = new LevelData[7];
 		
 		for(int i = 0; i < levels.length; i++) {
 			try {
@@ -27,7 +27,7 @@ public class Levels {
 	}
 	
 	public static Level newGame(Haptron haptron) {
-		return new Level(getLevel(3), 3, haptron);
+		return new Level(getLevel(6), 3, haptron, System.currentTimeMillis());
 	}
 	
 	public static LevelData getLevel(int level) {

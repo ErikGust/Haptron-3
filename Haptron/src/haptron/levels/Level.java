@@ -52,6 +52,8 @@ public class Level implements Screen, KeyListener {
 	
 	private final boolean[] keys;
 	
+	private final long startTimeStamp;
+	
 	private Thread thread;
 	
 	private Timer timer;
@@ -61,12 +63,13 @@ public class Level implements Screen, KeyListener {
 	private LevelBuilder fallback;
 	
 	public Level(LevelData level_data, LevelBuilder fallback) {
-		this(level_data, 3, fallback.haptron);
+		this(level_data, 5, fallback.haptron, System.currentTimeMillis());
 		this.fallback = fallback;
 		this.mainMenu.setText("Stop");
 	}
 	
-	public Level(LevelData level_data, int lives, final Haptron haptron) {
+	public Level(LevelData level_data, int lives, final Haptron haptron, long startTime) {
+		this.startTimeStamp = startTime;
 		this.level_data = level_data;
 		this.percent_threshold = level_data.getThreshold();
 		this.width 	= level_data.WIDTH;
@@ -84,8 +87,8 @@ public class Level implements Screen, KeyListener {
 		this.monsters = new Monster [level_data.getMonsterCount()];
 		
 		for(int i = 0; i < this.monsters.length; i++) {
-			monsters[i] = new Monster(MonsterData.values()
-					[(int)level_data.getMonster(i)], this);
+			monsters[i] = new Monster(MonsterData.values.get(
+					(int)level_data.getMonster(i)), this);
 			monsters[i].x = level_data.getMonsterX(i);
 			monsters[i].y = level_data.getMonsterY(i);
 			monsters[i].dirX = level_data.getMonsterDirX(i);
@@ -115,6 +118,8 @@ public class Level implements Screen, KeyListener {
 		this.win = new Event() {
 			@Override
 			public boolean tick() {
+				int timeInSeconds = (int) ((System.currentTimeMillis() - startTimeStamp)/1000);
+				Console.log("Game time: " + timeInSeconds + "s");
 				mainMenu();
 				return false;
 			}
@@ -130,7 +135,6 @@ public class Level implements Screen, KeyListener {
 		
 		Color color = new Color(0x102040);
 		Font font = new Font("Arial", Font.BOLD, 16);
-		
 		
 		this.mainMenu = new Button("Main Menu") {
 			@Override
@@ -204,7 +208,7 @@ public class Level implements Screen, KeyListener {
 		return new Level(Levels.nextLevel(level_data), 
 				player.getLives() < 5 ? player.getLives() + 1 
 				: player.getLives(),
-				haptron);
+				haptron, startTimeStamp);
 	}
 
 	public boolean hasNextLevel() {

@@ -10,28 +10,40 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-public enum MonsterData {
-	MONSTER1,MONSTER2,MONSTER3;
+public class MonsterData {
+	//MONSTER1,MONSTER2,MONSTER3;
+	
+	public static final ArrayList<MonsterData> values;
+	static {
+		values = new ArrayList<MonsterData>();
+		values.add(new MonsterData("monster1"));
+		values.add(new MonsterData("monster2"));
+		values.add(new MonsterData("monster3"));
+		values.add(new MonsterData("trump"));
+	}
+	
+	public final String name;
 	public final int damage;
 	public final double size;
 	public final double speed;
 	public final Image image;
 	
-	MonsterData() {
+	private MonsterData(String name) {
+		this.name = name;
 		Image image = null;
 		int damage = 0;
 		double speed = 0;
 		double size = 0;
 		try {
-			InputStream _in = Resources.getResource("haptron." + this);
+			InputStream _in = Resources.getResource("haptron." + name);
 			DataInputStream in = new DataInputStream(_in);
 			final int img_buffer_size = in.readInt(); 
 			final byte[] image_buffer = new byte[img_buffer_size];
@@ -53,7 +65,11 @@ public enum MonsterData {
 	
 	@Override
 	public String toString() {
-		return this.name().toLowerCase();
+		return name;
+	}
+	
+	public int ordinal() {
+		return values.indexOf(this);
 	}
 	
 	public static void generateMonsterData(File file, byte[] image, 
@@ -72,7 +88,15 @@ public enum MonsterData {
 		out.close();
 	}
 	
-	public static void _main(String... args) throws IOException {
+	/*
+	 * Usage: <program name> <output file> <image file> <damage> <speed> <size>
+	 * 
+	 * Note: 
+	 *  * if <damage> >= 1 then walls are destroyed on collision
+	 *  * <speed> is in tiles/tick
+	 *  * <size> is in tiles.
+	 *
+	public static void main(String[] args) throws IOException {
 		File img_file = new File(args[1]);
 		InputStream img_stream = new FileInputStream(img_file);
 		byte[] image = Resources.read(img_stream);
@@ -85,4 +109,5 @@ public enum MonsterData {
 				new Double(args[3]),
 				new Double(args[4]));
 	}
+	*/
 }
